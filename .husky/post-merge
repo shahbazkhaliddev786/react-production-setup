@@ -1,1 +1,0 @@
-#post-checkout or post-merge: Used to automatically run npm install when you switch branches or pull changes

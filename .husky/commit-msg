@@ -1,1 +1,4 @@
-#Used with Commitlint to enforce standardized commit message formats (e.g., feat: add login).
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx --no -- commitlint --edit "$1"
