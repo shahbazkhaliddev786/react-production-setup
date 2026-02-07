@@ -1,0 +1,1 @@
+#pre-push: Used to run tests or a full build before pushing code to a remote repository
