@@ -14,4 +14,6 @@ createRoot(document.getElementById('root')!).render(
    version in frontend as well. Just "npm version major" in frontend 
    it will automatically update the version in package.json 
    and also create a git tag with the same version.
+
+2. Versions, lint-staged, eslint, commitlint, husky, prettier, stylelint.
 */
