@@ -69,7 +69,18 @@ export default defineConfig(({ mode }) => {
             globals: true,
             environment: 'jsdom',
             setupFiles: './src/setup-tests.ts',
-            include: ['src/**/*.{test.ts,spec.ts}', 'src/**/*.{test.tsx,spec.tsx}']
+            include: ['src/**/*.{test.ts,spec.ts}', 'src/**/*.{test.tsx,spec.tsx}'],
+            coverage: {
+                reporter: ['json', 'html'],
+                include: ['src/**/*.{ts,tsx}', 'src/**/*.{test,spec}.{ts,tsx}'],
+                exclude: ['coverage', 'dist', 'build', 'src/super-tests.ts', 'src/**/*.{test,spec}.{ts,tsx}'],
+                thresholds: {
+                    statements: 80,
+                    branches: 80,
+                    functions: 80,
+                    lines: 80
+                }
+            }
         },
         resolve: {
             alias: {
