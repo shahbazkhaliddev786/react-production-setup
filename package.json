@@ -8,7 +8,7 @@
         "lint:eslint": "eslint",
         "format:check": "prettier --check .",
         "format:write": "prettier --write .",
-        "lint:style": "stylelint '**/*.{css,scss}'",
+        "lint:stylelint": "stylelint '**/*.{css,scss}'",
         "dev": "vite --mode development",
         "build": "tsc -b && vite build --mode production",
         "preview": "vite preview --mode production",
