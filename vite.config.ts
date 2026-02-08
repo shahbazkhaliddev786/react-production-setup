@@ -1,9 +1,10 @@
+/// <reference types="vitest" />
 import { defineConfig, loadEnv, type ServerOptions } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
-type Mode = 'development' | 'production'
+type Mode = 'development' | 'production' | 'testing'
 
 interface AppEnv {
     PORT: string
@@ -21,8 +22,8 @@ const validateEnv = (env: Record<string, string>) => {
     }
 
     const typedEnv = env as unknown as AppEnv
-    if (!['development', 'production'].includes(typedEnv.VITE_ENVIRONMENT)) {
-        throw new Error(`Invalid VITE_ENVIRONMENT value: ${typedEnv.VITE_ENVIRONMENT}. Must be 'development' or 'production'.`)
+    if (!['development', 'testing', 'production'].includes(typedEnv.VITE_ENVIRONMENT)) {
+        throw new Error(`Invalid VITE_ENVIRONMENT value: ${typedEnv.VITE_ENVIRONMENT}. Must be 'development', 'testing', or 'production'.`)
     }
 }
 
@@ -64,6 +65,12 @@ export default defineConfig(({ mode }) => {
             }),
             tailwindcss()
         ],
+        test: {
+            globals: true,
+            environment: 'jsdom',
+            setupFiles: './src/setup-tests.ts',
+            include: ['src/**/*.{test.ts,spec.ts}', 'src/**/*.{test.tsx,spec.tsx}']
+        },
         resolve: {
             alias: {
                 '@': path.resolve(__dirname, './src')
@@ -92,7 +99,8 @@ export default defineConfig(({ mode }) => {
                             return 'vendor'
                         }
                     }
-                }
+                },
+                external: [/.*\.(test|spec)\.(ts|tsx)$/]
             },
 
             // 4. Vite uses esbuild for CSS by default; 'true' enables it
