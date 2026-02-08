@@ -11,6 +11,10 @@ jobs:
         runs-on: ubuntu-latest
 
         environment: test
+        env:
+            PORT: ${{ secrets.PORT }}
+            BACKEND_URL: ${{ secrets.BACKEND_URL }}
+            VITE_ENVIRONMENT: ${{ vars.VITE_ENVIRONMENT }}
 
         steps:
             - name: Checkout Respository
