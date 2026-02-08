@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PageLayout Component > matches the snapshot 1`] = `
+<div>
+  <div>
+    page-layout
+  </div>
+</div>
+`;
