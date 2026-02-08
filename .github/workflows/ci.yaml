@@ -38,7 +38,7 @@ jobs:
               env:
                   PORT: ${{ secrets.PORT }}
                   BACKEND_URL: ${{ secrets.BACKEND_URL }}
-                  VITE_ENVIRONMENT: ${{ secrets.VITE_ENVIRONMENT }}
+                  VITE_ENVIRONMENT: ${{ vars.VITE_ENVIRONMENT }}
 
             - name: Run tests
               run: npm test
