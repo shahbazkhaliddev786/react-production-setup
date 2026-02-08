@@ -39,10 +39,45 @@ jobs:
 
             - name: Test Coverage
               run: npm run test:coverage
-              env:
-                  PORT: ${{ secrets.PORT }}
-                  BACKEND_URL: ${{ secrets.BACKEND_URL }}
-                  VITE_ENVIRONMENT: ${{ vars.VITE_ENVIRONMENT }}
 
             - name: Run tests
               run: npm test
+
+    production:
+        needs: test
+        runs-on: ubuntu-latest
+        environment: production
+        env:
+            PORT: ${{ secrets.PORT }}
+            BACKEND_URL: ${{ secrets.BACKEND_URL }}
+            VITE_ENVIRONMENT: ${{ vars.VITE_ENVIRONMENT }}
+
+        steps:
+            - name: Checkout Respository
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Run eslint
+              run: npm run lint:eslint
+
+            - name: Run Prettier
+              run: npm run format:check
+
+            - name: Run stylelint
+              run: npm run lint:stylelint
+
+            - name: Build the application
+              run: npm run build
+
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: dist
+                  path: dist
