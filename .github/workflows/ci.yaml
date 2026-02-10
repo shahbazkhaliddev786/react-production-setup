@@ -51,6 +51,7 @@ jobs:
             PORT: ${{ secrets.PORT }}
             BACKEND_URL: ${{ secrets.BACKEND_URL }}
             VITE_ENVIRONMENT: ${{ vars.VITE_ENVIRONMENT }}
+            SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
         steps:
             - name: Checkout Respository

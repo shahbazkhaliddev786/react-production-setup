@@ -2,6 +2,13 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import * as Sentry from '@sentry/react'
+
+Sentry.init({
+    dsn: 'https://d4037a264e78f666e70d3b90762d52cc@o4510863473573889.ingest.us.sentry.io/4510863482880001',
+    enabled: import.meta.env.VITE_ENVIRONMENT === 'production',
+    sendDefaultPii: true
+})
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>

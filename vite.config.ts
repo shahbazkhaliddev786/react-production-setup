@@ -3,17 +3,23 @@ import { defineConfig, loadEnv, type ServerOptions } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 type Mode = 'development' | 'production' | 'testing'
 
 interface AppEnv {
     PORT: string
     BACKEND_URL: string
+    SENTRY_AUTH_TOKEN: string
     VITE_ENVIRONMENT: Mode
 }
 
-const validateEnv = (env: Record<string, string>) => {
+const validateEnv = (envMode: Mode, env: AppEnv) => {
     const requiredVars: (keyof AppEnv)[] = ['PORT', 'BACKEND_URL', 'VITE_ENVIRONMENT']
+
+    if (envMode === 'production') {
+        requiredVars.push('SENTRY_AUTH_TOKEN')
+    }
 
     for (const key of requiredVars) {
         if (!env[key]) {
@@ -37,9 +43,9 @@ const normalizeport = (port: string): number => {
 
 export default defineConfig(({ mode }) => {
     const envMode = mode as Mode
-    const env = loadEnv(envMode, process.cwd(), '')
+    const env = loadEnv(envMode, process.cwd(), '') as unknown as AppEnv
 
-    validateEnv(env)
+    validateEnv(envMode, env)
 
     const port = normalizeport(env.PORT)
 
@@ -63,7 +69,16 @@ export default defineConfig(({ mode }) => {
                     plugins: [['babel-plugin-react-compiler']]
                 }
             }),
-            tailwindcss()
+            tailwindcss(),
+            env.VITE_ENVIRONMENT === 'production' &&
+                sentryVitePlugin({
+                    org: 'numl-xn',
+                    project: 'react-production-setup',
+                    authToken: env.SENTRY_AUTH_TOKEN,
+                    sourcemaps: {
+                        filesToDeleteAfterUpload: ['dist/assets/**/*.map']
+                    }
+                })
         ],
         test: {
             globals: true,
@@ -102,6 +117,8 @@ export default defineConfig(({ mode }) => {
                 },
                 mangle: true // This is the "uglifying" part (obfuscates names)
             },
+
+            sourcemap: env.VITE_ENVIRONMENT === 'production',
 
             // 3. Keep your custom chunking strategy
             rollupOptions: {
